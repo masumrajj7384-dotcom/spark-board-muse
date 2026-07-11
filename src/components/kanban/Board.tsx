@@ -186,7 +186,7 @@ export default function Board() {
             <DragOverlay>
               {activeTask ? (
                 <motion.div initial={{ scale: 1 }} animate={{ scale: 1.03 }}>
-                  <TaskCard task={activeTask} dragging />
+                  <TaskCard task={activeTask} dragging column={activeTask.status} />
                 </motion.div>
               ) : null}
             </DragOverlay>
