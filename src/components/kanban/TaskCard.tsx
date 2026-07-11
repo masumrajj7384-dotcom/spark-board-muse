@@ -14,10 +14,12 @@ export default function TaskCard({
   task,
   onOpen,
   dragging,
+  column,
 }: {
   task: Task;
   onOpen?: (t: Task) => void;
   dragging?: boolean;
+  column?: Task["status"];
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: task.id });
   const style = {
@@ -26,6 +28,8 @@ export default function TaskCard({
   };
   const due = formatDate(task.due_date);
   const overdue = task.due_date && new Date(task.due_date) < new Date(new Date().toDateString()) && task.status !== "done";
+  const stripeClass =
+    column === "todo" ? "border-l-todo" : column === "in_progress" ? "border-l-progress" : "border-l-done";
 
   return (
     <motion.div
@@ -34,15 +38,15 @@ export default function TaskCard({
       {...attributes}
       {...listeners}
       layout
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -2, boxShadow: "0 8px 24px -8px rgba(0,0,0,0.5)" }}
       onClick={(e) => {
         if (isDragging) return;
         e.stopPropagation();
         onOpen?.(task);
       }}
-      className={`group cursor-grab rounded-xl border border-border bg-card p-3.5 shadow-sm transition hover:shadow-md active:cursor-grabbing ${
+      className={`group cursor-grab overflow-hidden rounded-xl border border-border bg-card p-3.5 shadow-sm transition hover:shadow-md active:cursor-grabbing ${
         dragging ? "shadow-xl ring-1 ring-primary/30" : ""
-      }`}
+      } ${stripeClass} border-l-4`}
     >
       <div className="text-sm font-medium leading-snug text-foreground">{task.title}</div>
       {task.description && (

@@ -39,9 +39,9 @@ export default function AiChat({ open, onOpenChange }: { open: boolean; onOpenCh
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex w-full flex-col sm:max-w-md">
+      <SheetContent className="flex w-full flex-col border-l-border bg-card text-card-foreground sm:max-w-md">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
+          <SheetTitle className="flex items-center gap-2 text-foreground">
             <Sparkles className="h-4 w-4 text-primary" /> Board assistant
           </SheetTitle>
         </SheetHeader>
@@ -50,7 +50,7 @@ export default function AiChat({ open, onOpenChange }: { open: boolean; onOpenCh
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm ${
-                  m.role === "user" ? "bg-primary text-primary-foreground" : "bg-surface-2 text-foreground"
+                  m.role === "user" ? "bg-primary text-primary-foreground" : "bg-surface text-foreground"
                 }`}>
                   <div className="prose prose-sm max-w-none prose-p:my-1 prose-headings:my-1">
                     <ReactMarkdown>{m.content}</ReactMarkdown>
@@ -61,7 +61,7 @@ export default function AiChat({ open, onOpenChange }: { open: boolean; onOpenCh
             {busy && <div className="text-xs text-muted-foreground">Thinking…</div>}
           </div>
         </div>
-        <div className="flex gap-2 border-t border-border pt-3">
+        <div className="flex gap-2 border-t border-border bg-card pt-3">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}

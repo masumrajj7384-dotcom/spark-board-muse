@@ -67,8 +67,8 @@ function LoginPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-[oklch(0.72_0.15_70)]/15 blur-3xl" />
+        <div className="absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-todo/20 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-progress/15 blur-3xl" />
       </div>
       <div className="relative flex min-h-screen items-center justify-center px-4">
         <motion.div

@@ -19,11 +19,14 @@ export default function Column({
   onOpen: (t: Task) => void;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id });
+  const bgClass = id === "todo" ? "bg-todo-bg" : id === "in_progress" ? "bg-progress-bg" : "bg-done-bg";
+  const glowClass = id === "todo" ? "ring-todo/40" : id === "in_progress" ? "ring-progress/40" : "ring-done/40";
+  const topBorderClass = id === "todo" ? "border-t-todo" : id === "in_progress" ? "border-t-progress" : "border-t-done";
   return (
     <div
       ref={setNodeRef}
-      className={`flex min-h-[400px] flex-col rounded-2xl border border-border bg-surface-1 p-3 transition ${
-        isOver ? "ring-2 ring-primary/40" : ""
+      className={`flex min-h-[400px] flex-col rounded-2xl border border-border ${topBorderClass} border-t-4 ${bgClass} p-3 shadow-sm transition ${
+        isOver ? `ring-2 ${glowClass} scale-[1.01]` : ""
       }`}
     >
       <div className="mb-3 flex items-center justify-between px-1.5 py-1">
@@ -42,7 +45,7 @@ export default function Column({
       </div>
       <div className="flex flex-col gap-2.5">
         {items.map((t) => (
-          <TaskCard key={t.id} task={t} onOpen={onOpen} />
+          <TaskCard key={t.id} task={t} onOpen={onOpen} column={id} />
         ))}
         {items.length === 0 && (
           <button
