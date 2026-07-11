@@ -33,9 +33,9 @@ export type Task = {
 };
 
 const COLUMNS: { id: Task["status"]; label: string; dot: string }[] = [
-  { id: "todo", label: "To Do", dot: "bg-[oklch(0.72_0.15_70)]" },
-  { id: "in_progress", label: "In Progress", dot: "bg-[oklch(0.62_0.18_250)]" },
-  { id: "done", label: "Done", dot: "bg-[oklch(0.65_0.18_155)]" },
+  { id: "todo", label: "To Do", dot: "bg-todo" },
+  { id: "in_progress", label: "In Progress", dot: "bg-progress" },
+  { id: "done", label: "Done", dot: "bg-done" },
 ];
 
 export default function Board() {
@@ -129,7 +129,7 @@ export default function Board() {
   const activeTask = tasks.find((t) => t.id === activeId);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-20 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-[1400px] items-center justify-between px-6">
           <div className="flex items-center gap-2">
