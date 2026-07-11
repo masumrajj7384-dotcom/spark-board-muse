@@ -35,34 +35,56 @@
   --color-todo: var(--todo);
   --color-progress: var(--progress);
   --color-done: var(--done);
+  --color-todo-bg: var(--todo-bg);
+  --color-progress-bg: var(--progress-bg);
+  --color-done-bg: var(--done-bg);
 }
 
 :root {
   --radius: 0.875rem;
-  --background: oklch(0.995 0 0);
-  --foreground: oklch(0.18 0.02 270);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 270);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 270);
-  --primary: oklch(0.55 0.22 285);
+
+  /* Dark base: near-black with subtle blue tint */
+  --background: oklch(0.12 0.02 270);
+  --foreground: oklch(0.97 0.005 270);
+
+  --card: oklch(0.17 0.02 270);
+  --card-foreground: oklch(0.97 0.005 270);
+
+  --popover: oklch(0.17 0.02 270);
+  --popover-foreground: oklch(0.97 0.005 270);
+
+  /* Primary: bright blue */
+  --primary: oklch(0.6 0.22 250);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.97 0.005 270);
-  --secondary-foreground: oklch(0.22 0.02 270);
-  --muted: oklch(0.97 0.005 270);
-  --muted-foreground: oklch(0.5 0.02 270);
-  --accent: oklch(0.96 0.01 285);
-  --accent-foreground: oklch(0.25 0.05 285);
-  --destructive: oklch(0.6 0.22 25);
+
+  --secondary: oklch(0.22 0.03 270);
+  --secondary-foreground: oklch(0.92 0.01 270);
+
+  --muted: oklch(0.25 0.02 270);
+  --muted-foreground: oklch(0.65 0.02 270);
+
+  --accent: oklch(0.25 0.05 270);
+  --accent-foreground: oklch(0.95 0.02 270);
+
+  --destructive: oklch(0.62 0.22 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.93 0.005 270);
-  --input: oklch(0.94 0.005 270);
-  --ring: oklch(0.7 0.05 285);
-  --surface: oklch(0.985 0.003 270);
-  --surface-2: oklch(0.965 0.005 270);
-  --todo: oklch(0.72 0.15 70);
-  --progress: oklch(0.62 0.18 250);
-  --done: oklch(0.65 0.18 155);
+
+  --border: oklch(0.25 0.03 270);
+  --input: oklch(0.22 0.03 270);
+  --ring: oklch(0.55 0.15 250);
+
+  --surface: oklch(0.15 0.02 270);
+  --surface-2: oklch(0.21 0.02 270);
+
+  /* Column accents */
+  --todo: oklch(0.65 0.22 240);          /* Blue */
+  --todo-bg: oklch(0.18 0.06 240);        /* Blue-black tint */
+
+  --progress: oklch(0.7 0.24 145);        /* Green */
+  --progress-bg: oklch(0.18 0.06 145);    /* Green-black tint */
+
+  --done: oklch(0.6 0.2 260);             /* Sapphire blue */
+  --done-bg: oklch(0.18 0.06 260);       /* Sapphire-black tint */
 }
 
 @layer base {
