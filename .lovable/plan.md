@@ -1,35 +1,34 @@
-## Kanban Board with AI Assistant
+Apply a cohesive dark, vibrant color treatment to the app so the requested blue+black, green+black, and sapphire blue columns really pop.
 
-A clean, minimal Kanban tool inspired by the reference (light surfaces, soft borders, rounded cards, colored status pills, generous whitespace).
+**Design decisions (defaults)**
+- Switch the overall app to a dark theme (deep black background) so the "black" in the requested palettes feels intentional and the column colors feel vibrant rather than muted on white.
+- Done column: use **sapphire blue** — a deep, saturated blue — to give it a distinct, finished feel.
+- Keep the existing layout, drag-and-drop, and functionality; only change colors and surfaces.
 
-### Columns
-- To-Do, In Progress, Done — fixed three columns.
+**Files to change**
+1. `src/styles.css`
+   - Update `:root` design tokens for dark mode: `background`, `foreground`, `card`, `surface`, `surface-2`, `border`, `muted`, `primary`.
+   - Add column-specific tokens to `@theme inline`: `--color-todo`, `--color-progress`, `--color-done`, plus matching dimmed background variants (`--color-todo-bg`, `--color-progress-bg`, `--color-done-bg`) for column fills.
 
-### Task card
-- Title, description, due date (optional).
-- Smooth drag-and-drop between columns; reorder within a column.
-- Click a card to open an editor side panel.
-- Hover and drag animations for an interactive, "gorgeous" feel.
+2. `src/components/kanban/Board.tsx`
+   - Replace the `dot` values in `COLUMNS` with the new semantic tokens (e.g. `bg-todo`, `bg-progress`, `bg-done`).
+   - Optionally add a subtle top-gradient or keep the header minimal in dark style.
 
-### Auth & persistence (Lovable Cloud)
-- Email + password and Google sign-in on a `/login` page.
-- Each user has their own private board; tasks auto-save to the database on every change (create, edit, move, delete).
-- `tasks` table with RLS so users only see their own rows.
+3. `src/components/kanban/Column.tsx`
+   - Use the column’s background token (`bg-todo-bg`, etc.) for the column surface.
+   - Add a colored top border or header bar using the accent token.
+   - Ensure text, count badge, and empty-state dashed border remain readable on dark backgrounds.
 
-### AI Assistant
-- Floating chat panel on the board page.
-- Board-aware: knows the user's current tasks and can answer "what's overdue?", "summarize in-progress", etc.
-- Can create / update / move / delete tasks via tool-calling. Changes appear live on the board.
-- Streaming responses, conversation kept in memory for the session.
+4. `src/components/kanban/TaskCard.tsx`
+   - Keep cards dark but give them a subtle left-edge stripe or hover glow matching the column accent so cards feel tied to their column color.
+   - Ensure overdue date styling still reads clearly on dark cards.
 
-### Design
-- Light theme matching the reference: white canvas, subtle gray column backgrounds, colored status dots, rounded cards with soft shadow on hover.
-- Header with board title, user avatar, sign-out, and "Ask AI" button.
+5. `src/components/kanban/AiChat.tsx`
+   - Update message bubbles and sheet background to use the new dark surface tokens so the chat panel matches the board.
 
-### Technical notes
-- TanStack Start routes: `/` (landing → redirects to `/board` if logged in), `/login`, `/_authenticated/board`.
-- Lovable Cloud for DB + auth; Lovable AI Gateway (`google/gemini-3-flash-preview`) via a server function with tool-calling for board mutations.
-- `@dnd-kit` for drag-and-drop.
-- Tasks persist on every mutation — no manual save needed.
+6. `src/routes/login.tsx`
+   - Adjust the login page background gradient/blur colors to the new dark palette so authentication doesn’t feel like a separate light-themed app.
 
-Shall I build it?
+**Verification**
+- Run the dev build and open the board preview to confirm all three columns show the correct colors and remain readable.
+- Check the login page and AI chat panel for visual consistency in the new dark theme.
