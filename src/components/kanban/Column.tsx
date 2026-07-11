@@ -25,7 +25,7 @@ export default function Column({
   return (
     <div
       ref={setNodeRef}
-      className={`flex min-h-[400px] flex-col rounded-2xl border border-border ${topBorderClass} border-t-4 bg-surface p-3 shadow-sm transition ${
+      className={`flex min-h-[400px] flex-col rounded-2xl border border-border ${topBorderClass} border-t-4 ${bgClass} p-3 shadow-sm transition ${
         isOver ? `ring-2 ${glowClass} scale-[1.01]` : ""
       }`}
     >
