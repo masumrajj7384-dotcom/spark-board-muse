@@ -2,6 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+function safeError(context: string, error: unknown): Error {
+  console.error(`[tasks.functions] ${context}:`, error);
+  return new Error("Something went wrong, please try again.");
+}
+
+
 const StatusEnum = z.enum(["todo", "in_progress", "done"]);
 
 export const listTasks = createServerFn({ method: "GET" })
