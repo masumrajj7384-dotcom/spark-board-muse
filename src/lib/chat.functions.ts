@@ -180,11 +180,16 @@ ${JSON.stringify(tasks ?? [], null, 2)}`;
         };
       if (!resp.ok) {
         const txt = await resp.text();
-        throw new Error(`AI error ${resp.status}: ${txt}`);
+        console.error(`[chat] AI gateway error ${resp.status}: ${txt}`);
+        throw new Error("The assistant is temporarily unavailable. Please try again.");
       }
       const json = await resp.json();
       const msg = json.choices?.[0]?.message;
-      if (!msg) throw new Error("No message in AI response");
+      if (!msg) {
+        console.error("[chat] No message in AI response", json);
+        throw new Error("The assistant is temporarily unavailable. Please try again.");
+      }
+
       convo.push(msg);
 
       const toolCalls = msg.tool_calls;
