@@ -131,7 +131,10 @@ export const chatWithBoard = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
+    if (!apiKey) {
+      console.error("[chat] LOVABLE_API_KEY not configured");
+      throw new Error("The assistant is temporarily unavailable. Please try again.");
+    }
 
     // Snapshot board for context
     const { data: tasks } = await supabase
