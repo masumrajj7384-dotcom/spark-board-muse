@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
+import { useMemo, useState } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -12,25 +10,13 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { motion } from "framer-motion";
-import { Sparkles, LogOut, Plus } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { listTasks, createTask, updateTask, deleteTask, reorderTask } from "@/lib/tasks.functions";
-import { Button } from "@/components/ui/button";
+import { Sparkles, Plus } from "lucide-react";
+import { useLocalTasks, type LocalTask } from "@/lib/local-tasks";
 import Column from "./Column";
 import TaskCard from "./TaskCard";
 import TaskEditor from "./TaskEditor";
-import AiChat from "./AiChat";
-import { toast } from "sonner";
 
-export type Task = {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string | null;
-  status: "todo" | "in_progress" | "done";
-  due_date: string | null;
-  position: number;
-};
+export type Task = LocalTask & { user_id?: string };
 
 const COLUMNS: { id: Task["status"]; label: string; dot: string }[] = [
   { id: "todo", label: "To Do", dot: "bg-todo" },
@@ -39,47 +25,25 @@ const COLUMNS: { id: Task["status"]; label: string; dot: string }[] = [
 ];
 
 export default function Board() {
-  const qc = useQueryClient();
-  const list = useServerFn(listTasks);
-  const create = useServerFn(createTask);
-  const update = useServerFn(updateTask);
-  const remove = useServerFn(deleteTask);
-  const reorder = useServerFn(reorderTask);
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: () => list(),
-  });
-  const tasks: Task[] = (data?.tasks as Task[]) ?? [];
+  const { tasks, hydrated, create, update, remove } = useLocalTasks();
 
   const [activeId, setActiveId] = useState<string | null>(null);
   const [editing, setEditing] = useState<Task | null>(null);
   const [creatingIn, setCreatingIn] = useState<Task["status"] | null>(null);
-  const [chatOpen, setChatOpen] = useState(false);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
-  const createMut = useMutation({
-    mutationFn: (vars: { title: string; description?: string; status: Task["status"]; due_date?: string | null }) =>
-      create({ data: vars }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks"] }),
-  });
-  const updateMut = useMutation({
-    mutationFn: (vars: Partial<Task> & { id: string }) => update({ data: vars as any }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks"] }),
-  });
-  const deleteMut = useMutation({
-    mutationFn: (id: string) => remove({ data: { id } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks"] }),
-  });
-
-  const grouped = COLUMNS.map((c) => ({
-    ...c,
-    items: tasks.filter((t) => t.status === c.id).sort((a, b) => a.position - b.position),
-  }));
+  const grouped = useMemo(
+    () =>
+      COLUMNS.map((c) => ({
+        ...c,
+        items: tasks.filter((t) => t.status === c.id).sort((a, b) => a.position - b.position),
+      })),
+    [tasks],
+  );
 
   const onDragStart = (e: DragStartEvent) => setActiveId(e.active.id as string);
-  const onDragEnd = async (e: DragEndEvent) => {
+  const onDragEnd = (e: DragEndEvent) => {
     setActiveId(null);
     const { active, over } = e;
     if (!over) return;
@@ -110,20 +74,7 @@ export default function Board() {
     }
 
     if (activeTask.status === newStatus && activeTask.position === newPos) return;
-
-    // optimistic
-    qc.setQueryData(["tasks"], (old: any) => ({
-      tasks: (old?.tasks ?? []).map((t: Task) =>
-        t.id === activeTask.id ? { ...t, status: newStatus, position: newPos } : t,
-      ),
-    }));
-
-    try {
-      await reorder({ data: { id: activeTask.id, status: newStatus, position: newPos } });
-    } catch (err: any) {
-      toast.error(err.message ?? "Failed to move task");
-      qc.invalidateQueries({ queryKey: ["tasks"] });
-    }
+    update(activeTask.id, { status: newStatus, position: newPos });
   };
 
   const activeTask = tasks.find((t) => t.id === activeId);
@@ -141,14 +92,6 @@ export default function Board() {
               <div className="text-[11px] text-muted-foreground">Your personal board</div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button size="sm" onClick={() => setChatOpen(true)} className="gap-1.5">
-              <Sparkles className="h-3.5 w-3.5" /> Ask AI
-            </Button>
-            <Button size="sm" variant="ghost" onClick={() => supabase.auth.signOut()}>
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
         </div>
       </header>
 
@@ -157,12 +100,12 @@ export default function Board() {
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">Tasks</h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Drag cards to reorder. Click a card to edit. Changes save automatically.
+              Drag cards to reorder. Click a card to edit. Saved to this browser.
             </p>
           </div>
         </div>
 
-        {isLoading ? (
+        {!hydrated ? (
           <div className="grid grid-cols-3 gap-5">
             {[0, 1, 2].map((i) => (
               <div key={i} className="h-96 animate-pulse rounded-2xl bg-surface-2" />
@@ -199,23 +142,22 @@ export default function Board() {
           task={editing}
           defaultStatus={creatingIn ?? undefined}
           onClose={() => { setEditing(null); setCreatingIn(null); }}
-          onSave={async (vals) => {
+          onSave={(vals) => {
             if (editing) {
-              await updateMut.mutateAsync({ id: editing.id, ...vals } as any);
+              update(editing.id, vals);
             } else {
-              await createMut.mutateAsync({ ...vals, status: creatingIn ?? "todo" } as any);
+              create({ ...vals, status: creatingIn ?? "todo" });
             }
             setEditing(null);
             setCreatingIn(null);
           }}
-          onDelete={editing ? async () => {
-            await deleteMut.mutateAsync(editing.id);
+          onDelete={editing ? () => {
+            remove(editing.id);
             setEditing(null);
           } : undefined}
         />
       )}
 
-      {/* Floating add button on mobile */}
       <button
         onClick={() => setCreatingIn("todo")}
         className="fixed bottom-6 right-6 grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:scale-105 md:hidden"
@@ -223,8 +165,6 @@ export default function Board() {
       >
         <Plus className="h-5 w-5" />
       </button>
-
-      <AiChat open={chatOpen} onOpenChange={setChatOpen} />
     </div>
   );
 }
