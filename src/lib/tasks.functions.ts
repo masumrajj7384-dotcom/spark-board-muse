@@ -19,7 +19,7 @@ export const listTasks = createServerFn({ method: "GET" })
       .select("*")
       .order("status")
       .order("position");
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { tasks: data ?? [] };
   });
 
@@ -57,7 +57,7 @@ export const createTask = createServerFn({ method: "POST" })
       })
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { task: row };
   });
 
@@ -84,7 +84,7 @@ export const updateTask = createServerFn({ method: "POST" })
       .eq("id", id)
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { task: row };
   });
 
@@ -96,7 +96,7 @@ export const deleteTask = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { error } = await supabase.from("tasks").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { ok: true };
   });
 
@@ -117,6 +117,6 @@ export const reorderTask = createServerFn({ method: "POST" })
       .from("tasks")
       .update({ status: data.status, position: data.position })
       .eq("id", data.id);
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { ok: true };
   });
