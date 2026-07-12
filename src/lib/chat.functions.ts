@@ -131,7 +131,10 @@ export const chatWithBoard = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
+    if (!apiKey) {
+      console.error("[chat] LOVABLE_API_KEY not configured");
+      throw new Error("The assistant is temporarily unavailable. Please try again.");
+    }
 
     // Snapshot board for context
     const { data: tasks } = await supabase
@@ -180,11 +183,16 @@ ${JSON.stringify(tasks ?? [], null, 2)}`;
         };
       if (!resp.ok) {
         const txt = await resp.text();
-        throw new Error(`AI error ${resp.status}: ${txt}`);
+        console.error(`[chat] AI gateway error ${resp.status}: ${txt}`);
+        throw new Error("The assistant is temporarily unavailable. Please try again.");
       }
       const json = await resp.json();
       const msg = json.choices?.[0]?.message;
-      if (!msg) throw new Error("No message in AI response");
+      if (!msg) {
+        console.error("[chat] No message in AI response", json);
+        throw new Error("The assistant is temporarily unavailable. Please try again.");
+      }
+
       convo.push(msg);
 
       const toolCalls = msg.tool_calls;

@@ -2,6 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+function safeError(context: string, error: unknown): Error {
+  console.error(`[tasks.functions] ${context}:`, error);
+  return new Error("Something went wrong, please try again.");
+}
+
+
 const StatusEnum = z.enum(["todo", "in_progress", "done"]);
 
 export const listTasks = createServerFn({ method: "GET" })
@@ -13,7 +19,7 @@ export const listTasks = createServerFn({ method: "GET" })
       .select("*")
       .order("status")
       .order("position");
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { tasks: data ?? [] };
   });
 
@@ -51,7 +57,7 @@ export const createTask = createServerFn({ method: "POST" })
       })
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { task: row };
   });
 
@@ -78,7 +84,7 @@ export const updateTask = createServerFn({ method: "POST" })
       .eq("id", id)
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { task: row };
   });
 
@@ -90,7 +96,7 @@ export const deleteTask = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { error } = await supabase.from("tasks").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { ok: true };
   });
 
@@ -111,6 +117,6 @@ export const reorderTask = createServerFn({ method: "POST" })
       .from("tasks")
       .update({ status: data.status, position: data.position })
       .eq("id", data.id);
-    if (error) throw new Error(error.message);
+    if (error) throw safeError("db error", error);
     return { ok: true };
   });

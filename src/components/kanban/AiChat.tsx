@@ -31,7 +31,9 @@ export default function AiChat({ open, onOpenChange }: { open: boolean; onOpenCh
       setMessages([...next, { role: "assistant", content: res?.reply ?? "Done." }]);
       qc.invalidateQueries({ queryKey: ["tasks"] });
     } catch (e: any) {
-      setMessages([...next, { role: "assistant", content: `Error: ${e?.message ?? "unknown"}` }]);
+      console.error("[AiChat] send failed:", e);
+      setMessages([...next, { role: "assistant", content: "Something went wrong, please try again." }]);
+
     } finally {
       setBusy(false);
     }
