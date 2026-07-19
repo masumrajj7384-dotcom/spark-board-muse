@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import WelcomeIntro, { useIntroController } from "@/components/WelcomeIntro";
+import PresenceAvatars from "@/components/kanban/PresenceAvatars";
 
 const NAV = [
   { to: "/", label: "Board", icon: LayoutGrid },
