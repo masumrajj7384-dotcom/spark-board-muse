@@ -651,7 +651,8 @@ export default function WelcomeIntro({ open, onClose }: { open: boolean; onClose
               </div>
               <Button
                 onClick={onClose}
-                className={cn("bg-gradient-to-r from-primary to-primary/70 shadow-[0_10px_30px_-10px_rgba(139,92,246,0.6)]")}
+                data-magnetic
+                className={cn("bg-gradient-to-r from-primary to-primary/70 shadow-[0_10px_30px_-10px_rgba(139,92,246,0.6)] transition-transform hover:shadow-[0_16px_40px_-10px_rgba(139,92,246,0.85)]")}
               >
                 Explore Board
               </Button>
