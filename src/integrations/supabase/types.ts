@@ -14,41 +14,304 @@ export type Database = {
   }
   public: {
     Tables: {
-      tasks: {
+      activity: {
+        Row: {
+          action: string
+          board_id: string | null
+          created_at: string
+          id: string
+          meta: Json | null
+          task_id: string | null
+        }
+        Insert: {
+          action: string
+          board_id?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json | null
+          task_id?: string | null
+        }
+        Update: {
+          action?: string
+          board_id?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json | null
+          task_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "boards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      board_columns: {
+        Row: {
+          board_id: string
+          collapsed: boolean
+          color: string
+          created_at: string
+          id: string
+          name: string
+          position: number
+          updated_at: string
+        }
+        Insert: {
+          board_id: string
+          collapsed?: boolean
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          position?: number
+          updated_at?: string
+        }
+        Update: {
+          board_id?: string
+          collapsed?: boolean
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          position?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "board_columns_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "boards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      boards: {
         Row: {
           created_at: string
           description: string | null
-          due_date: string | null
           id: string
-          position: number
-          status: string
-          title: string
+          name: string
           updated_at: string
-          user_id: string
         }
         Insert: {
           created_at?: string
           description?: string | null
-          due_date?: string | null
           id?: string
-          position?: number
-          status?: string
-          title: string
+          name?: string
           updated_at?: string
-          user_id: string
         }
         Update: {
           created_at?: string
           description?: string | null
-          due_date?: string | null
           id?: string
-          position?: number
-          status?: string
-          title?: string
+          name?: string
           updated_at?: string
-          user_id?: string
         }
         Relationships: []
+      }
+      checklist_items: {
+        Row: {
+          completed: boolean
+          created_at: string
+          id: string
+          position: number
+          task_id: string
+          text: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          position?: number
+          task_id: string
+          text: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          position?: number
+          task_id?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklist_items_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          task_id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          task_id: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      labels: {
+        Row: {
+          board_id: string
+          color: string
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          board_id: string
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          board_id?: string
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "labels_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "boards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_labels: {
+        Row: {
+          label_id: string
+          task_id: string
+        }
+        Insert: {
+          label_id: string
+          task_id: string
+        }
+        Update: {
+          label_id?: string
+          task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_labels_label_id_fkey"
+            columns: ["label_id"]
+            isOneToOne: false
+            referencedRelation: "labels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_labels_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          archived: boolean
+          board_id: string
+          column_id: string
+          completed: boolean
+          created_at: string
+          description: string | null
+          due_date: string | null
+          estimated_minutes: number | null
+          id: string
+          position: number
+          priority: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          archived?: boolean
+          board_id: string
+          column_id: string
+          completed?: boolean
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          position?: number
+          priority?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          archived?: boolean
+          board_id?: string
+          column_id?: string
+          completed?: boolean
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          position?: number
+          priority?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "boards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_column_id_fkey"
+            columns: ["column_id"]
+            isOneToOne: false
+            referencedRelation: "board_columns"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
