@@ -39,6 +39,7 @@ export default function AppShell({
       return next;
     });
   };
+  const intro = useIntroController();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   // Cursor-reactive aurora halo
