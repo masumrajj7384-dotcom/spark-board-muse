@@ -118,12 +118,12 @@ export default function AppShell({
           </button>
 
           <div className="ml-auto flex items-center gap-1.5">
-            <Button variant="ghost" size="sm" onClick={onOpenCommand} className="hidden sm:inline-flex">
+            <Button variant="ghost" size="sm" onClick={onOpenCommand} data-magnetic className="hidden sm:inline-flex">
               <Zap className="h-3.5 w-3.5" />
               <span className="hidden md:inline">Commands</span>
               <kbd className="ml-1 rounded bg-muted px-1.5 py-0.5 text-[10px]">⌘K</kbd>
             </Button>
-            <Button variant="ghost" size="sm" onClick={onOpenAi}>
+            <Button variant="ghost" size="sm" onClick={onOpenAi} data-magnetic>
               <Bot className="h-3.5 w-3.5" />
               <span className="hidden md:inline">Assistant</span>
             </Button>
@@ -131,6 +131,7 @@ export default function AppShell({
               variant="default"
               size="sm"
               onClick={intro.replay}
+              data-magnetic
               aria-label="Video Tutorial"
               title="Watch video tutorial"
               className="bg-gradient-to-r from-primary to-primary/70 text-primary-foreground shadow-[0_8px_24px_-10px_rgba(139,92,246,0.7)] hover:opacity-95"
