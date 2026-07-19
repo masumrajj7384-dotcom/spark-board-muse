@@ -107,6 +107,9 @@ export default function AppShell({
               <Bot className="h-3.5 w-3.5" />
               <span className="hidden md:inline">Assistant</span>
             </Button>
+            <Button variant="ghost" size="icon" onClick={intro.replay} aria-label="Play demo" title="Play demo">
+              <HelpCircle className="h-4 w-4" />
+            </Button>
             <ThemeMenu />
           </div>
         </div>
