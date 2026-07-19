@@ -119,7 +119,7 @@ export default function AppShell({
             sidebarCollapsed ? "w-0" : "w-56 p-2",
           )}
         >
-          <div className="w-56">
+          <div className="glass-panel w-56 rounded-2xl mt-3 ml-3">
             <SidebarNav pathname={pathname} />
           </div>
         </aside>
