@@ -30,6 +30,7 @@ export default function Column({
   const [name, setName] = useState(column.name);
 
   const colorClass = `bg-col-${column.color}`;
+  const tintVar = { ["--tint" as never]: `var(--color-col-${column.color})` } as React.CSSProperties;
 
   if (column.collapsed) {
     return (
@@ -47,12 +48,13 @@ export default function Column({
   return (
     <div
       ref={setNodeRef}
+      style={tintVar}
       className={cn(
-        "glass-panel flex w-[300px] shrink-0 flex-col rounded-2xl transition-all",
-        isOver && "ring-2 ring-primary/40 scale-[1.01]",
+        "glass-panel col-tinted relative flex w-[300px] shrink-0 flex-col self-stretch rounded-2xl transition-all",
+        isOver && "ring-2 ring-primary/60 scale-[1.01]",
       )}
     >
-      <div className="flex items-center gap-2 border-b border-border/40 px-3 py-2.5">
+      <div className="relative z-10 flex items-center gap-2 border-b border-border/40 px-3 py-2.5">
         <div className={cn("h-2 w-2 rounded-full", colorClass)} />
         {editingName ? (
           <Input
@@ -86,7 +88,7 @@ export default function Column({
         </DropdownMenu>
       </div>
 
-      <div className="flex min-h-[100px] flex-col gap-2 p-2">
+      <div className="relative z-10 flex flex-1 min-h-[120px] flex-col gap-2 p-2">
         <AnimatePresence initial={false}>
           {items.map((t) => (
             <motion.div key={t.id} layout initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
