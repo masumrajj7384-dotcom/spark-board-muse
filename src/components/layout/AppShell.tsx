@@ -27,6 +27,17 @@ export default function AppShell({
   onOpenAi?: () => void;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("flow.sidebar.collapsed") === "1";
+  });
+  const toggleCollapsed = () => {
+    setSidebarCollapsed((c) => {
+      const next = !c;
+      if (typeof window !== "undefined") window.localStorage.setItem("flow.sidebar.collapsed", next ? "1" : "0");
+      return next;
+    });
+  };
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   return (
