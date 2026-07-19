@@ -302,7 +302,7 @@ function BoardSim({ time, playing }: { time: number; playing: boolean }) {
               <div
                 key={c.id}
                 className={cn(
-                  "relative flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-1.5 backdrop-blur-sm ring-0 transition-all duration-300",
+                  "relative flex min-w-0 flex-col rounded-xl border border-white/10 bg-white/[0.04] p-1 backdrop-blur-sm ring-0 transition-all duration-300 sm:p-1.5",
                   isDragOver && `ring-2 ${TONE_RING[c.tone]}`,
                   isBlockedGlow && `ring-2 ${TONE_RING.rose}`,
                   isCompletedGlow && `ring-2 ${TONE_RING.emerald}`,
@@ -310,20 +310,19 @@ function BoardSim({ time, playing }: { time: number; playing: boolean }) {
               >
                 <div
                   className={cn(
-                    "flex items-center justify-between rounded-md px-1 py-0.5 transition-all",
+                    "flex min-w-0 items-center justify-center rounded-md px-0.5 py-0.5 transition-all",
                     isHeaderHover && "bg-white/10 ring-1 ring-primary/50",
                   )}
                 >
                   <span
                     className={cn(
-                      "text-[8px] font-semibold uppercase tracking-wider text-white/70",
+                      "block min-w-0 truncate whitespace-nowrap text-center font-semibold uppercase tracking-[0.06em] text-white/75",
+                      "text-[7px] leading-tight sm:text-[8.5px] sm:tracking-[0.08em]",
                       isHeaderHover && TONE_HEADER[c.tone],
                     )}
+                    title={c.name}
                   >
                     {c.name}
-                  </span>
-                  <span className="rounded bg-white/10 px-1 text-[7px] text-white/60">
-                    {c.id === "backlog" && !card.visible ? 0 : ""}
                   </span>
                 </div>
                 <div className="mt-1 flex-1 rounded-md bg-gradient-to-b from-white/5 to-transparent opacity-40" />
