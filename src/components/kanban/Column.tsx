@@ -48,8 +48,8 @@ export default function Column({
     <div
       ref={setNodeRef}
       className={cn(
-        "flex w-[300px] shrink-0 flex-col rounded-2xl border border-border/60 bg-surface/60 transition-all",
-        isOver && "border-primary/60 bg-surface ring-2 ring-primary/20",
+        "glass-panel flex w-[300px] shrink-0 flex-col rounded-2xl transition-all",
+        isOver && "ring-2 ring-primary/40 scale-[1.01]",
       )}
     >
       <div className="flex items-center gap-2 border-b border-border/40 px-3 py-2.5">
