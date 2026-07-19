@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -22,6 +22,9 @@ import TaskDrawer from "./TaskDrawer";
 import CommandPalette from "./CommandPalette";
 import AiChat from "./AiChat";
 import FiltersBar, { emptyFilters, type BoardFilters } from "./FiltersBar";
+import InsightsPanel from "./InsightsPanel";
+import ActivityFeed from "./ActivityFeed";
+import DragEffectsLayer, { type EffectsHandle } from "./DragEffectsLayer";
 import { Button } from "@/components/ui/button";
 import AppShell from "@/components/layout/AppShell";
 import { Input } from "@/components/ui/input";
