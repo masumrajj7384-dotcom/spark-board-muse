@@ -40,6 +40,22 @@ export default function AppShell({
   };
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
+  // Cursor-reactive aurora halo
+  useEffect(() => {
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const x = (e.clientX / window.innerWidth) * 100;
+        const y = (e.clientY / window.innerHeight) * 100;
+        document.body.style.setProperty("--mx", `${x}%`);
+        document.body.style.setProperty("--my", `${y}%`);
+      });
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => { window.removeEventListener("pointermove", onMove); cancelAnimationFrame(raf); };
+  }, []);
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       {/* Top nav */}
