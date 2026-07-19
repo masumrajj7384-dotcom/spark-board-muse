@@ -57,9 +57,9 @@ export default function AppShell({
   }, []);
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-dvh text-foreground">
       {/* Top nav */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+      <header className="glass-panel sticky top-0 z-40 border-x-0 border-t-0 rounded-none">
         <div className="mx-auto flex h-14 items-center gap-3 px-3 sm:px-6">
           <button
             className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground hover:bg-accent md:hidden"
