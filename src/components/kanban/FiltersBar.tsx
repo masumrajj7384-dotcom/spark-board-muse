@@ -57,7 +57,7 @@ export default function FiltersBar({
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="sm" className={cn(activeCount > 0 && "border-primary text-primary")}>
+          <Button variant="outline" size="sm" data-magnetic className={cn(activeCount > 0 && "border-primary text-primary")}>
             <Filter className="mr-1.5 h-3.5 w-3.5" /> Filter
             {activeCount > 0 && <span className="ml-1.5 rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">{activeCount}</span>}
           </Button>

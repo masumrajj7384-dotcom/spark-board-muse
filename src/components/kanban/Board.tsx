@@ -155,7 +155,7 @@ export default function Board() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="shrink-0">
+                <Button variant="outline" size="sm" data-magnetic className="shrink-0">
                   Board actions <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -299,7 +299,8 @@ export default function Board() {
       {/* Mobile FAB */}
       <button
         onClick={newTaskInFirstColumn}
-        className="fixed bottom-5 right-5 grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:scale-105 md:hidden"
+        data-magnetic
+        className="fixed bottom-5 right-5 grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-6px_rgba(139,92,246,0.75)] transition hover:scale-105 hover:shadow-[0_16px_40px_-8px_rgba(139,92,246,0.95)] md:hidden"
         aria-label="Add task"
       >
         <Plus className="h-5 w-5" />
