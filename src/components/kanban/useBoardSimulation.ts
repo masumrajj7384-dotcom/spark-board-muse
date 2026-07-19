@@ -11,8 +11,9 @@ export type SimEvent = {
 
 const DEMO_TITLE = "API Gateway Setup";
 const PAUSE_MS = 15_000;
-const STEP_MIN = 4200;
-const STEP_JITTER = 1600;
+export const SIM_MIN_MS = 1000;
+export const SIM_MAX_MS = 10_000;
+export const SIM_DEFAULT_MS = 4500;
 
 type BoardApi = {
   columns: ColumnRow[];
@@ -27,7 +28,7 @@ type BoardApi = {
   onComplete: () => void;
 };
 
-export function useBoardSimulation(api: BoardApi, enabled: boolean) {
+export function useBoardSimulation(api: BoardApi, enabled: boolean, intervalMs: number = SIM_DEFAULT_MS) {
   const [events, setEvents] = useState<SimEvent[]>([]);
   const pauseUntil = useRef(0);
   const stepRef = useRef(0);
@@ -35,6 +36,8 @@ export function useBoardSimulation(api: BoardApi, enabled: boolean) {
   const idc = useRef(0);
   const apiRef = useRef(api);
   apiRef.current = api;
+  const intervalRef = useRef(intervalMs);
+  intervalRef.current = intervalMs;
 
   const pause = useCallback((ms: number = PAUSE_MS) => {
     pauseUntil.current = Math.max(pauseUntil.current, Date.now() + ms);
@@ -146,7 +149,8 @@ export function useBoardSimulation(api: BoardApi, enabled: boolean) {
     };
 
     const loop = () => {
-      const delay = STEP_MIN + Math.random() * STEP_JITTER;
+      const base = Math.max(SIM_MIN_MS, Math.min(SIM_MAX_MS, intervalRef.current));
+      const delay = base + Math.random() * Math.min(600, base * 0.15);
       timer = setTimeout(async () => {
         await runStep();
         if (!cancelled) loop();

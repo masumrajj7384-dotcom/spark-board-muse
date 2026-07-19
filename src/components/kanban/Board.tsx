@@ -42,6 +42,7 @@ export default function Board() {
   const [newColOpen, setNewColOpen] = useState(false);
   const [newColName, setNewColName] = useState("");
   const [filters, setFilters] = useState<BoardFilters>(emptyFilters());
+  const [simIntervalMs, setSimIntervalMs] = useState(4500);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
   const effectsRef = useRef<EffectsHandle | null>(null);
@@ -73,6 +74,7 @@ export default function Board() {
       onComplete: triggerCompletionBurst,
     },
     !b.loading && !!boardId,
+    simIntervalMs,
   );
 
   const filteredTasksById = useMemo(() => {
@@ -352,7 +354,7 @@ export default function Board() {
         <Plus className="h-5 w-5" />
       </button>
 
-      <ActivityFeed events={sim.events} />
+      <ActivityFeed events={sim.events} intervalMs={simIntervalMs} onIntervalChange={setSimIntervalMs} />
       <DragEffectsLayer active={!!activeId} handleRef={effectsRef} />
     </AppShell>
   );
