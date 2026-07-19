@@ -42,6 +42,7 @@ export default function Board() {
   const [newColOpen, setNewColOpen] = useState(false);
   const [newColName, setNewColName] = useState("");
   const [filters, setFilters] = useState<BoardFilters>(emptyFilters());
+  const [simIntervalMs, setSimIntervalMs] = useState(4500);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
   const effectsRef = useRef<EffectsHandle | null>(null);
