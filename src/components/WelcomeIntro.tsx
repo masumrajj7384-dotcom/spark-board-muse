@@ -14,26 +14,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const STORAGE_KEY = "mra.welcome.seen";
-
 export function useIntroController() {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!window.localStorage.getItem(STORAGE_KEY)) {
-      const t = setTimeout(() => setOpen(true), 250);
-      return () => clearTimeout(t);
-    }
-  }, []);
+  const [open, setOpen] = useState(true);
   return {
     open,
-    close: () => {
-      if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, "1");
-      setOpen(false);
-    },
+    close: () => setOpen(false),
     replay: () => setOpen(true),
   };
 }
+
 
 /* ============================ Timeline ============================ */
 
