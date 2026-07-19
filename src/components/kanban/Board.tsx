@@ -155,7 +155,7 @@ export default function Board() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="shrink-0">
+                <Button variant="outline" size="sm" data-magnetic className="shrink-0">
                   Board actions <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </Button>
               </DropdownMenuTrigger>
