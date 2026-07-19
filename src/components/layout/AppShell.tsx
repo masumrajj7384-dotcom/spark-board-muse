@@ -46,7 +46,7 @@ export default function AppShell({
               <Sparkles className="h-4 w-4" />
             </div>
             <div className="hidden sm:block">
-              <div className="text-sm font-semibold tracking-tight">Flow</div>
+              <div className="text-sm font-semibold tracking-tight">Masum Raj Automation</div>
               <div className="text-[10px] leading-none text-muted-foreground">Productivity, quietly</div>
             </div>
           </Link>
