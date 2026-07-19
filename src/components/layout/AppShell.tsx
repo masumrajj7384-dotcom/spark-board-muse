@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useTheme, type Theme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -40,10 +40,26 @@ export default function AppShell({
   };
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
+  // Cursor-reactive aurora halo
+  useEffect(() => {
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const x = (e.clientX / window.innerWidth) * 100;
+        const y = (e.clientY / window.innerHeight) * 100;
+        document.body.style.setProperty("--mx", `${x}%`);
+        document.body.style.setProperty("--my", `${y}%`);
+      });
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => { window.removeEventListener("pointermove", onMove); cancelAnimationFrame(raf); };
+  }, []);
+
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-dvh text-foreground">
       {/* Top nav */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+      <header className="glass-panel sticky top-0 z-40 border-x-0 border-t-0 rounded-none">
         <div className="mx-auto flex h-14 items-center gap-3 px-3 sm:px-6">
           <button
             className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground hover:bg-accent md:hidden"
@@ -98,12 +114,12 @@ export default function AppShell({
         {/* Sidebar */}
         <aside
           className={cn(
-            "border-r border-border/60 bg-sidebar text-sidebar-foreground transition-all duration-200 overflow-hidden",
+            "text-sidebar-foreground transition-all duration-300 overflow-hidden",
             "hidden md:block shrink-0",
-            sidebarCollapsed ? "w-0 border-r-0" : "w-56",
+            sidebarCollapsed ? "w-0" : "w-56 p-2",
           )}
         >
-          <div className="w-56">
+          <div className="glass-panel w-56 rounded-2xl mt-3 ml-3">
             <SidebarNav pathname={pathname} />
           </div>
         </aside>

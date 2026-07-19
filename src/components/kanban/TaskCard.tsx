@@ -45,6 +45,13 @@ export default function TaskCard({
 
   const stripe = `border-l-col-${columnColor ?? "blue"}`;
 
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--gx", `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty("--gy", `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
+
   return (
     <motion.div
       ref={setNodeRef}
@@ -52,17 +59,20 @@ export default function TaskCard({
       {...attributes}
       {...listeners}
       layout
-      whileHover={{ y: -1 }}
+      onMouseMove={handleMove}
+      whileHover={{ y: -2, scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
       onClick={(e) => {
         if (isDragging) return;
         e.stopPropagation();
         onOpen?.();
       }}
       className={cn(
-        "group cursor-grab overflow-hidden rounded-xl border border-border/70 bg-card p-3 shadow-sm transition-all hover:border-primary/40 hover:shadow-md active:cursor-grabbing",
+        "glass card-glow group cursor-grab overflow-hidden rounded-xl p-3 transition-all active:cursor-grabbing",
         "border-l-[3px]",
         stripe,
-        dragging && "ring-2 ring-primary/50 shadow-xl",
+        (dragging || isDragging) && "ring-2 ring-primary/60 shadow-[0_20px_60px_-15px_rgba(139,92,246,0.6)] scale-[1.03] rotate-[0.5deg]",
       )}
     >
       {/* Priority + labels row */}

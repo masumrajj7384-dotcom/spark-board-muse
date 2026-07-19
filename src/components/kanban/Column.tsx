@@ -33,7 +33,7 @@ export default function Column({
 
   if (column.collapsed) {
     return (
-      <div className="flex h-fit w-12 shrink-0 flex-col items-center gap-3 rounded-xl border border-border/60 bg-surface px-1 py-3">
+      <div className="glass flex h-fit w-12 shrink-0 flex-col items-center gap-3 rounded-2xl px-1 py-3">
         <button onClick={onToggleCollapse} className="grid h-6 w-6 place-items-center rounded hover:bg-accent">
           <ChevronDown className="h-3.5 w-3.5 -rotate-90" />
         </button>
@@ -48,8 +48,8 @@ export default function Column({
     <div
       ref={setNodeRef}
       className={cn(
-        "flex w-[300px] shrink-0 flex-col rounded-2xl border border-border/60 bg-surface/60 transition-all",
-        isOver && "border-primary/60 bg-surface ring-2 ring-primary/20",
+        "glass-panel flex w-[300px] shrink-0 flex-col rounded-2xl transition-all",
+        isOver && "ring-2 ring-primary/40 scale-[1.01]",
       )}
     >
       <div className="flex items-center gap-2 border-b border-border/40 px-3 py-2.5">
