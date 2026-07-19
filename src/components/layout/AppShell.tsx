@@ -52,6 +52,14 @@ export default function AppShell({
           >
             <Menu className="h-4 w-4" />
           </button>
+          <button
+            className="hidden h-9 w-9 place-items-center rounded-lg text-muted-foreground hover:bg-accent md:grid"
+            onClick={toggleCollapsed}
+            aria-label={sidebarCollapsed ? "Expand workspace" : "Collapse workspace"}
+            title={sidebarCollapsed ? "Expand workspace" : "Collapse workspace"}
+          >
+            {sidebarCollapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+          </button>
           <Link to="/" className="flex items-center gap-2">
             <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-primary to-primary/60 text-primary-foreground shadow-sm">
               <Sparkles className="h-4 w-4" />
