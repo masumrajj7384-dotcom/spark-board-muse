@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu } from "lucide-react";
+import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useTheme, type Theme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,17 @@ export default function AppShell({
   onOpenAi?: () => void;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("flow.sidebar.collapsed") === "1";
+  });
+  const toggleCollapsed = () => {
+    setSidebarCollapsed((c) => {
+      const next = !c;
+      if (typeof window !== "undefined") window.localStorage.setItem("flow.sidebar.collapsed", next ? "1" : "0");
+      return next;
+    });
+  };
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   return (
@@ -40,6 +51,14 @@ export default function AppShell({
             aria-label="Toggle sidebar"
           >
             <Menu className="h-4 w-4" />
+          </button>
+          <button
+            className="hidden h-9 w-9 place-items-center rounded-lg text-muted-foreground hover:bg-accent md:grid"
+            onClick={toggleCollapsed}
+            aria-label={sidebarCollapsed ? "Expand workspace" : "Collapse workspace"}
+            title={sidebarCollapsed ? "Expand workspace" : "Collapse workspace"}
+          >
+            {sidebarCollapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
           </button>
           <Link to="/" className="flex items-center gap-2">
             <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-primary to-primary/60 text-primary-foreground shadow-sm">
@@ -79,12 +98,14 @@ export default function AppShell({
         {/* Sidebar */}
         <aside
           className={cn(
-            "border-r border-border/60 bg-sidebar text-sidebar-foreground transition-all",
-            "hidden md:block",
-            "w-56 shrink-0",
+            "border-r border-border/60 bg-sidebar text-sidebar-foreground transition-all duration-200 overflow-hidden",
+            "hidden md:block shrink-0",
+            sidebarCollapsed ? "w-0 border-r-0" : "w-56",
           )}
         >
-          <SidebarNav pathname={pathname} />
+          <div className="w-56">
+            <SidebarNav pathname={pathname} />
+          </div>
         </aside>
 
         {sidebarOpen && (
