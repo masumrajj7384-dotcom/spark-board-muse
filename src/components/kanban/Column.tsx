@@ -30,6 +30,7 @@ export default function Column({
   const [name, setName] = useState(column.name);
 
   const colorClass = `bg-col-${column.color}`;
+  const tintVar = { ["--tint" as never]: `var(--color-col-${column.color})` } as React.CSSProperties;
 
   if (column.collapsed) {
     return (
@@ -47,9 +48,10 @@ export default function Column({
   return (
     <div
       ref={setNodeRef}
+      style={tintVar}
       className={cn(
-        "glass-panel flex w-[300px] shrink-0 flex-col rounded-2xl transition-all",
-        isOver && "ring-2 ring-primary/40 scale-[1.01]",
+        "glass-panel col-tinted relative flex w-[300px] shrink-0 flex-col self-stretch rounded-2xl transition-all",
+        isOver && "ring-2 ring-primary/60 scale-[1.01]",
       )}
     >
       <div className="flex items-center gap-2 border-b border-border/40 px-3 py-2.5">
