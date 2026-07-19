@@ -70,10 +70,11 @@ export default function TaskCard({
       }}
       className={cn(
         "glass card-glow group cursor-grab overflow-hidden rounded-xl p-3 transition-all active:cursor-grabbing",
-        "border-l-[3px]",
+        "border-l-[3px] border-t-white/15 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.5),0_25px_60px_-20px_rgba(0,0,0,0.55)] hover:shadow-[0_16px_40px_-10px_rgba(0,0,0,0.55),0_40px_90px_-25px_rgba(0,0,0,0.65)]",
         stripe,
-        (dragging || isDragging) && "ring-2 ring-primary/60 shadow-[0_20px_60px_-15px_rgba(139,92,246,0.6)] scale-[1.03] rotate-[0.5deg]",
+        (dragging || isDragging) && "ring-2 ring-primary/60 shadow-[0_30px_80px_-15px_rgba(139,92,246,0.65)] scale-[1.03] rotate-[0.5deg]",
       )}
+
     >
       {/* Priority + labels row */}
       <div className="mb-2 flex flex-wrap items-center gap-1">
