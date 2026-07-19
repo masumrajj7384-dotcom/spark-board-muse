@@ -274,8 +274,9 @@ export default function Board() {
                   key={column.id}
                   column={column}
                   items={items}
-                  onOpen={(t) => setOpenTaskId(t.id)}
+                  onOpen={(t) => { sim.pause(); setOpenTaskId(t.id); }}
                   onAdd={async () => {
+                    sim.pause();
                     const t = await b.createTask({ column_id: column.id, title: "New task" });
                     if (t) setOpenTaskId(t.id);
                   }}
