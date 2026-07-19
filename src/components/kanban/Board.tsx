@@ -74,6 +74,7 @@ export default function Board() {
       onComplete: triggerCompletionBurst,
     },
     !b.loading && !!boardId,
+    simIntervalMs,
   );
 
   const filteredTasksById = useMemo(() => {
