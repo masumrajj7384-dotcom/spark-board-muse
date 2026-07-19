@@ -231,6 +231,10 @@ export default function Board() {
           </div>
         </div>
 
+        <InsightsPanel tasks={[...b.tasksById.values()]} columns={b.columns} />
+
+
+
         {b.loading || !boardId ? (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-6">
             {[0, 1, 2, 3, 4, 5].map((i) => (
