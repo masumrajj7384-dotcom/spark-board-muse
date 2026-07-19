@@ -147,7 +147,8 @@ export function useBoardSimulation(api: BoardApi, enabled: boolean, intervalMs: 
     };
 
     const loop = () => {
-      const delay = STEP_MIN + Math.random() * STEP_JITTER;
+      const base = Math.max(SIM_MIN_MS, Math.min(SIM_MAX_MS, intervalRef.current));
+      const delay = base + Math.random() * Math.min(600, base * 0.15);
       timer = setTimeout(async () => {
         await runStep();
         if (!cancelled) loop();
