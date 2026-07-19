@@ -1,10 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen, HelpCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useTheme, type Theme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import WelcomeIntro, { useIntroController } from "@/components/WelcomeIntro";
 
 const NAV = [
   { to: "/", label: "Board", icon: LayoutGrid },
