@@ -1,11 +1,25 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
 
-type ChatMessage = { role: "user" | "assistant" | "system"; content: string };
+const MessageSchema = z.object({
+  role: z.enum(["user", "assistant", "system"]),
+  content: z.string().min(1).max(4000),
+});
+
+const InputSchema = z.object({
+  messages: z.array(MessageSchema).min(1).max(20),
+  boardContext: z.string().max(8000).optional(),
+});
+
+type ChatInput = z.infer<typeof InputSchema>;
 
 export const aiChat = createServerFn({ method: "POST" })
-  .inputValidator((data: { messages: ChatMessage[]; boardContext?: string }) => {
-    if (!Array.isArray(data?.messages)) throw new Error("messages required");
-    return data;
+  .inputValidator((data: unknown): ChatInput => {
+    const parsed = InputSchema.safeParse(data);
+    if (!parsed.success) {
+      throw new Error("Invalid chat request: message limits exceeded.");
+    }
+    return parsed.data;
   })
   .handler(async ({ data }) => {
     const key = process.env.LOVABLE_API_KEY;
