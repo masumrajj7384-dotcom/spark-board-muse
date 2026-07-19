@@ -60,6 +60,7 @@ export default function Column({
   return (
     <div
       ref={setNodeRef}
+      data-column-id={column.id}
       style={tintVar}
       className={cn(
         "glass-panel col-tinted relative flex w-[300px] shrink-0 flex-col self-stretch rounded-2xl transition-all",

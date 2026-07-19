@@ -25,6 +25,7 @@ import FiltersBar, { emptyFilters, type BoardFilters } from "./FiltersBar";
 import InsightsPanel from "./InsightsPanel";
 import ActivityFeed from "./ActivityFeed";
 import DragEffectsLayer, { type EffectsHandle } from "./DragEffectsLayer";
+import { useBoardSimulation } from "./useBoardSimulation";
 import { Button } from "@/components/ui/button";
 import AppShell from "@/components/layout/AppShell";
 import { Input } from "@/components/ui/input";
@@ -50,6 +51,29 @@ export default function Board() {
     window.addEventListener("pointermove", track);
     return () => window.removeEventListener("pointermove", track);
   }, []);
+
+  const triggerCompletionBurst = () => {
+    // Prefer the last-known pointer, otherwise burst over the Completed column area
+    const done = b.columns.find((c) => c.color === "emerald");
+    const el = done ? document.querySelector<HTMLElement>(`[data-column-id="${done.id}"]`) : null;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      effectsRef.current?.celebrate(r.left + r.width / 2, r.top + r.height / 2);
+    } else {
+      effectsRef.current?.celebrate(window.innerWidth * 0.82, window.innerHeight * 0.5);
+    }
+  };
+
+  const sim = useBoardSimulation(
+    {
+      columns: b.columns,
+      createTask: b.createTask,
+      updateTask: b.updateTask,
+      deleteTask: b.deleteTask,
+      onComplete: triggerCompletionBurst,
+    },
+    !b.loading && !!boardId,
+  );
 
   const filteredTasksById = useMemo(() => {
     const q = filters.search.trim().toLowerCase();
@@ -105,13 +129,14 @@ export default function Board() {
   });
 
   const newTaskInFirstColumn = async () => {
+    sim.pause();
     const col = b.columns[0];
     if (!col) return;
     const created = await b.createTask({ column_id: col.id, title: "New task" });
     if (created) setOpenTaskId(created.id);
   };
 
-  const onDragStart = (e: DragStartEvent) => setActiveId(e.active.id as string);
+  const onDragStart = (e: DragStartEvent) => { sim.pause(); setActiveId(e.active.id as string); };
   const onDragEnd = async (e: DragEndEvent) => {
     setActiveId(null);
     const { active, over } = e;
@@ -249,8 +274,9 @@ export default function Board() {
                   key={column.id}
                   column={column}
                   items={items}
-                  onOpen={(t) => setOpenTaskId(t.id)}
+                  onOpen={(t) => { sim.pause(); setOpenTaskId(t.id); }}
                   onAdd={async () => {
+                    sim.pause();
                     const t = await b.createTask({ column_id: column.id, title: "New task" });
                     if (t) setOpenTaskId(t.id);
                   }}
@@ -326,7 +352,7 @@ export default function Board() {
         <Plus className="h-5 w-5" />
       </button>
 
-      <ActivityFeed tasks={[...b.tasksById.values()]} />
+      <ActivityFeed events={sim.events} />
       <DragEffectsLayer active={!!activeId} handleRef={effectsRef} />
     </AppShell>
   );
