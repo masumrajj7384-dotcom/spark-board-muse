@@ -47,6 +47,30 @@ export default function ActivityFeed({
         </button>
         <AnimatePresence initial={false}>
           {!collapsed && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="flex items-center gap-2 border-t border-white/5 px-3 py-2"
+            >
+              <Gauge className="h-3.5 w-3.5 shrink-0 text-col-violet" />
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground shrink-0">Speed</span>
+              <Slider
+                min={SIM_MIN_MS}
+                max={SIM_MAX_MS}
+                step={250}
+                value={[intervalMs]}
+                onValueChange={(v) => onIntervalChange(v[0])}
+                className="flex-1"
+              />
+              <span className="w-10 shrink-0 text-right font-mono text-[10px] tabular-nums text-muted-foreground">
+                {(intervalMs / 1000).toFixed(1)}s
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <AnimatePresence initial={false}>
+          {!collapsed && (
             <motion.ul
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
