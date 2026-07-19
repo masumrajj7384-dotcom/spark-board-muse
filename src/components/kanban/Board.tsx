@@ -25,6 +25,7 @@ import FiltersBar, { emptyFilters, type BoardFilters } from "./FiltersBar";
 import InsightsPanel from "./InsightsPanel";
 import ActivityFeed from "./ActivityFeed";
 import DragEffectsLayer, { type EffectsHandle } from "./DragEffectsLayer";
+import { useBoardSimulation } from "./useBoardSimulation";
 import { Button } from "@/components/ui/button";
 import AppShell from "@/components/layout/AppShell";
 import { Input } from "@/components/ui/input";
