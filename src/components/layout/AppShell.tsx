@@ -1,10 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen, HelpCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useTheme, type Theme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import WelcomeIntro, { useIntroController } from "@/components/WelcomeIntro";
 
 const NAV = [
   { to: "/", label: "Board", icon: LayoutGrid },
@@ -38,6 +39,7 @@ export default function AppShell({
       return next;
     });
   };
+  const intro = useIntroController();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   // Cursor-reactive aurora halo
@@ -105,6 +107,9 @@ export default function AppShell({
               <Bot className="h-3.5 w-3.5" />
               <span className="hidden md:inline">Assistant</span>
             </Button>
+            <Button variant="ghost" size="icon" onClick={intro.replay} aria-label="Play demo" title="Play demo">
+              <HelpCircle className="h-4 w-4" />
+            </Button>
             <ThemeMenu />
           </div>
         </div>
@@ -135,6 +140,7 @@ export default function AppShell({
 
         <main className="min-w-0 flex-1">{children}</main>
       </div>
+      <WelcomeIntro open={intro.open} onClose={intro.close} />
     </div>
   );
 }
