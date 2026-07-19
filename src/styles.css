@@ -180,14 +180,98 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     font-family: ui-sans-serif, system-ui, -apple-system, "Inter", sans-serif;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Animated aurora / 3D gradient mesh — deep cosmic indigo, vibrant violet, ambient cyan */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    z-index: -2;
+    pointer-events: none;
+    background:
+      radial-gradient(closest-side, oklch(0.55 0.28 275 / 0.55), transparent 70%) 18% 22% / 55% 55% no-repeat,
+      radial-gradient(closest-side, oklch(0.6 0.3 310 / 0.5), transparent 70%) 78% 18% / 50% 55% no-repeat,
+      radial-gradient(closest-side, oklch(0.7 0.18 210 / 0.45), transparent 70%) 55% 82% / 60% 60% no-repeat,
+      radial-gradient(closest-side, oklch(0.5 0.24 260 / 0.35), transparent 70%) 30% 65% / 45% 45% no-repeat;
+    filter: blur(70px) saturate(140%);
+    animation: aurora 24s ease-in-out infinite alternate;
+  }
+
+  /* Cursor-reactive halo — updated by JS via --mx / --my (viewport %) */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 30%),
+      oklch(0.7 0.24 295 / 0.18), transparent 60%);
+    transition: background 200ms linear;
+  }
+
+  /* Light mode: softer aurora */
+  :root:not(.dark):not(.amoled) body::before {
+    background:
+      radial-gradient(closest-side, oklch(0.85 0.15 275 / 0.55), transparent 70%) 15% 20% / 55% 55% no-repeat,
+      radial-gradient(closest-side, oklch(0.88 0.18 310 / 0.5), transparent 70%) 80% 20% / 50% 55% no-repeat,
+      radial-gradient(closest-side, oklch(0.9 0.12 210 / 0.5), transparent 70%) 55% 85% / 60% 60% no-repeat;
+    filter: blur(80px) saturate(130%);
   }
 }
 
-@utility glass {
-  background: color-mix(in oklab, var(--color-card) 65%, transparent);
-  backdrop-filter: blur(14px) saturate(140%);
-  border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
+@keyframes aurora {
+  0%   { background-position: 18% 22%, 78% 18%, 55% 82%, 30% 65%; transform: rotate(0deg) scale(1); }
+  33%  { background-position: 28% 40%, 62% 30%, 45% 65%, 40% 45%; }
+  66%  { background-position: 12% 55%, 82% 45%, 65% 75%, 25% 75%; }
+  100% { background-position: 22% 25%, 72% 22%, 50% 80%, 35% 60%; transform: rotate(2deg) scale(1.05); }
 }
+
+@utility glass {
+  background: color-mix(in oklab, var(--color-card) 45%, transparent);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 10%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-foreground) 8%, transparent),
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    0 12px 32px -14px rgba(0, 0, 0, 0.55),
+    0 40px 80px -40px rgba(0, 0, 0, 0.5);
+}
+
+@utility glass-panel {
+  background: color-mix(in oklab, var(--color-card) 55%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 8%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-foreground) 6%, transparent),
+    0 24px 60px -30px rgba(0, 0, 0, 0.6);
+}
+
+/* Cursor-follow border glow. JS sets --gx / --gy on the element on mousemove. */
+@utility card-glow {
+  position: relative;
+  isolation: isolate;
+}
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(220px circle at var(--gx, 50%) var(--gy, 50%),
+    oklch(0.75 0.22 295 / 0.9), oklch(0.7 0.22 245 / 0.4) 40%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.card-glow:hover::before { opacity: 1; }
 
 @utility scrollbar-thin {
   scrollbar-width: thin;
