@@ -45,7 +45,6 @@ export default function TaskCard({
 
   const stripe = `border-l-col-${columnColor ?? "blue"}`;
 
-  return (
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
