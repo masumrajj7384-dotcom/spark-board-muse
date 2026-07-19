@@ -33,7 +33,7 @@ export default function Column({
 
   if (column.collapsed) {
     return (
-      <div className="flex h-fit w-12 shrink-0 flex-col items-center gap-3 rounded-xl border border-border/60 bg-surface px-1 py-3">
+      <div className="glass flex h-fit w-12 shrink-0 flex-col items-center gap-3 rounded-2xl px-1 py-3">
         <button onClick={onToggleCollapse} className="grid h-6 w-6 place-items-center rounded hover:bg-accent">
           <ChevronDown className="h-3.5 w-3.5 -rotate-90" />
         </button>
