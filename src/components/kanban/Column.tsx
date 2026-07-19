@@ -39,8 +39,8 @@ export default function Column({
   const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState(column.name);
 
-  const colorClass = `bg-col-${column.color}`;
   const textColor = `text-col-${column.color}`;
+
   const tintVar = { ["--tint" as never]: `var(--color-col-${column.color})` } as React.CSSProperties;
   const Icon = COLOR_ICON[column.color] ?? Circle;
 
