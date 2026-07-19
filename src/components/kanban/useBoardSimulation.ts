@@ -11,8 +11,9 @@ export type SimEvent = {
 
 const DEMO_TITLE = "API Gateway Setup";
 const PAUSE_MS = 15_000;
-const STEP_MIN = 4200;
-const STEP_JITTER = 1600;
+export const SIM_MIN_MS = 1000;
+export const SIM_MAX_MS = 10_000;
+export const SIM_DEFAULT_MS = 4500;
 
 type BoardApi = {
   columns: ColumnRow[];
