@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -22,6 +22,9 @@ import TaskDrawer from "./TaskDrawer";
 import CommandPalette from "./CommandPalette";
 import AiChat from "./AiChat";
 import FiltersBar, { emptyFilters, type BoardFilters } from "./FiltersBar";
+import InsightsPanel from "./InsightsPanel";
+import ActivityFeed from "./ActivityFeed";
+import DragEffectsLayer, { type EffectsHandle } from "./DragEffectsLayer";
 import { Button } from "@/components/ui/button";
 import AppShell from "@/components/layout/AppShell";
 import { Input } from "@/components/ui/input";
@@ -40,6 +43,13 @@ export default function Board() {
   const [filters, setFilters] = useState<BoardFilters>(emptyFilters());
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const effectsRef = useRef<EffectsHandle | null>(null);
+  const lastPointer = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  useEffect(() => {
+    const track = (e: PointerEvent) => { lastPointer.current = { x: e.clientX, y: e.clientY }; };
+    window.addEventListener("pointermove", track);
+    return () => window.removeEventListener("pointermove", track);
+  }, []);
 
   const filteredTasksById = useMemo(() => {
     const q = filters.search.trim().toLowerCase();
@@ -134,6 +144,12 @@ export default function Board() {
 
     if (activeTask.column_id === newColId && activeTask.position === newPos) return;
     await b.updateTask(activeTask.id, { column_id: newColId, position: newPos });
+
+    // Completion burst when dropped in an "emerald" (Completed) column
+    const destCol = b.columns.find((c) => c.id === newColId);
+    if (destCol?.color === "emerald") {
+      effectsRef.current?.celebrate(lastPointer.current.x, lastPointer.current.y);
+    }
   };
 
   const activeTask = activeId ? b.tasksById.get(activeId) : null;
@@ -155,7 +171,7 @@ export default function Board() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" data-magnetic className="shrink-0">
+                <Button variant="outline" size="sm" data-magnetic className="ambient-glow shrink-0">
                   Board actions <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -214,6 +230,10 @@ export default function Board() {
             </DropdownMenu>
           </div>
         </div>
+
+        <InsightsPanel tasks={[...b.tasksById.values()]} columns={b.columns} />
+
+
 
         {b.loading || !boardId ? (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-6">
@@ -305,6 +325,9 @@ export default function Board() {
       >
         <Plus className="h-5 w-5" />
       </button>
+
+      <ActivityFeed tasks={[...b.tasksById.values()]} />
+      <DragEffectsLayer active={!!activeId} handleRef={effectsRef} />
     </AppShell>
   );
 }
