@@ -52,6 +52,29 @@ export default function Board() {
     return () => window.removeEventListener("pointermove", track);
   }, []);
 
+  const triggerCompletionBurst = () => {
+    // Prefer the last-known pointer, otherwise burst over the Completed column area
+    const done = b.columns.find((c) => c.color === "emerald");
+    const el = done ? document.querySelector<HTMLElement>(`[data-column-id="${done.id}"]`) : null;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      effectsRef.current?.celebrate(r.left + r.width / 2, r.top + r.height / 2);
+    } else {
+      effectsRef.current?.celebrate(window.innerWidth * 0.82, window.innerHeight * 0.5);
+    }
+  };
+
+  const sim = useBoardSimulation(
+    {
+      columns: b.columns,
+      createTask: b.createTask,
+      updateTask: b.updateTask,
+      deleteTask: b.deleteTask,
+      onComplete: triggerCompletionBurst,
+    },
+    !b.loading && !!boardId,
+  );
+
   const filteredTasksById = useMemo(() => {
     const q = filters.search.trim().toLowerCase();
     const now = new Date();
