@@ -88,7 +88,7 @@ export default function Column({
         </DropdownMenu>
       </div>
 
-      <div className="flex min-h-[100px] flex-col gap-2 p-2">
+      <div className="relative z-10 flex flex-1 min-h-[120px] flex-col gap-2 p-2">
         <AnimatePresence initial={false}>
           {items.map((t) => (
             <motion.div key={t.id} layout initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
