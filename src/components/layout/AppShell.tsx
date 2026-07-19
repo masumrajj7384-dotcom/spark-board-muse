@@ -140,6 +140,7 @@ export default function AppShell({
 
         <main className="min-w-0 flex-1">{children}</main>
       </div>
+      <WelcomeIntro open={intro.open} onClose={intro.close} />
     </div>
   );
 }
