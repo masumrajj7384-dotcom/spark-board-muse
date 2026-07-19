@@ -10,7 +10,9 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
+import { Plus, ChevronDown, Plus as PlusIcon, Bot, Archive, LayoutDashboard, Calendar as CalendarIcon, GanttChart, FileText, Download, Sparkles } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { isPast, isToday, addDays } from "date-fns";
 import { toast } from "sonner";
 import { useBoardId, useBoard, type TaskWithMeta } from "@/lib/board-data";
@@ -147,8 +149,69 @@ export default function Board() {
               {b.tasks.length} tasks • {b.columns.length} columns • autosaved
             </p>
           </div>
-          <div className="flex-1 max-w-xl">
-            <FiltersBar filters={filters} setFilters={setFilters} labels={b.labels} />
+          <div className="flex flex-1 max-w-2xl items-center gap-2">
+            <div className="min-w-0 flex-1">
+              <FiltersBar filters={filters} setFilters={setFilters} labels={b.labels} />
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="shrink-0">
+                  Board actions <ChevronDown className="ml-1 h-3.5 w-3.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Create</DropdownMenuLabel>
+                <DropdownMenuItem onClick={newTaskInFirstColumn}>
+                  <PlusIcon className="mr-2 h-3.5 w-3.5" /> New task
+                  <kbd className="ml-auto text-[10px] text-muted-foreground">N</kbd>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setNewColOpen(true)}>
+                  <PlusIcon className="mr-2 h-3.5 w-3.5" /> New column
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Tools</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => setAiOpen(true)}>
+                  <Bot className="mr-2 h-3.5 w-3.5" /> AI assistant
+                  <kbd className="ml-auto text-[10px] text-muted-foreground">A</kbd>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setCmdOpen(true)}>
+                  <Sparkles className="mr-2 h-3.5 w-3.5" /> Command palette
+                  <kbd className="ml-auto text-[10px] text-muted-foreground">⌘K</kbd>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    const data = JSON.stringify({ columns: b.columns, tasks: b.tasks, labels: b.labels }, null, 2);
+                    const blob = new Blob([data], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `board-${new Date().toISOString().slice(0, 10)}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    toast.success("Board exported");
+                  }}
+                >
+                  <Download className="mr-2 h-3.5 w-3.5" /> Export JSON
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Views</DropdownMenuLabel>
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard"><LayoutDashboard className="mr-2 h-3.5 w-3.5" /> Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/calendar"><CalendarIcon className="mr-2 h-3.5 w-3.5" /> Calendar</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/timeline"><GanttChart className="mr-2 h-3.5 w-3.5" /> Timeline</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/templates"><FileText className="mr-2 h-3.5 w-3.5" /> Templates</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/archived"><Archive className="mr-2 h-3.5 w-3.5" /> Archived</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
