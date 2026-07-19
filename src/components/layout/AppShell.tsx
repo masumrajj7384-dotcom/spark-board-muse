@@ -114,9 +114,9 @@ export default function AppShell({
         {/* Sidebar */}
         <aside
           className={cn(
-            "border-r border-border/60 bg-sidebar text-sidebar-foreground transition-all duration-200 overflow-hidden",
+            "text-sidebar-foreground transition-all duration-300 overflow-hidden",
             "hidden md:block shrink-0",
-            sidebarCollapsed ? "w-0 border-r-0" : "w-56",
+            sidebarCollapsed ? "w-0" : "w-56 p-2",
           )}
         >
           <div className="w-56">
