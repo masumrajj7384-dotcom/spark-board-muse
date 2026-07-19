@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen, HelpCircle } from "lucide-react";
+import { LayoutGrid, LayoutDashboard, Calendar, GanttChart, FileText, Archive, Sparkles, Search, Sun, Moon, Zap, Bot, Menu, PanelLeftClose, PanelLeftOpen, PlayCircle } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useTheme, type Theme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
@@ -107,8 +107,16 @@ export default function AppShell({
               <Bot className="h-3.5 w-3.5" />
               <span className="hidden md:inline">Assistant</span>
             </Button>
-            <Button variant="ghost" size="icon" onClick={intro.replay} aria-label="Play demo" title="Play demo">
-              <HelpCircle className="h-4 w-4" />
+            <Button
+              variant="default"
+              size="sm"
+              onClick={intro.replay}
+              aria-label="Video Tutorial"
+              title="Watch video tutorial"
+              className="bg-gradient-to-r from-primary to-primary/70 text-primary-foreground shadow-[0_8px_24px_-10px_rgba(139,92,246,0.7)] hover:opacity-95"
+            >
+              <PlayCircle className="h-4 w-4" />
+              <span className="hidden sm:inline">Video Tutorial</span>
             </Button>
             <ThemeMenu />
           </div>
