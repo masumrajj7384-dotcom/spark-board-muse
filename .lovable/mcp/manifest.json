@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "flow-kanban-mcp",
+      "version": "0.1.0",
+      "title": "Flow Kanban MCP"
+    },
+    "tools": [
+      {
+        "name": "echo",
+        "title": "Echo",
+        "description": "Echo the input text back to the caller. Useful for verifying the MCP connection works.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Text to echo back."
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "brainstorm_tasks",
+        "title": "Brainstorm kanban tasks",
+        "description": "Given a goal or project description, return a suggested list of kanban tasks (title, description, and starting status). Uses the Lovable AI Gateway. The caller can then add these to their board.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "goal": {
+              "type": "string",
+              "minLength": 3,
+              "description": "The goal, project, or theme to brainstorm tasks for."
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "description": "How many tasks to generate. Defaults to 5."
+            }
+          },
+          "required": [
+            "goal"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
