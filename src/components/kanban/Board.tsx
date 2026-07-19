@@ -43,6 +43,13 @@ export default function Board() {
   const [filters, setFilters] = useState<BoardFilters>(emptyFilters());
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const effectsRef = useRef<EffectsHandle | null>(null);
+  const lastPointer = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  useEffect(() => {
+    const track = (e: PointerEvent) => { lastPointer.current = { x: e.clientX, y: e.clientY }; };
+    window.addEventListener("pointermove", track);
+    return () => window.removeEventListener("pointermove", track);
+  }, []);
 
   const filteredTasksById = useMemo(() => {
     const q = filters.search.trim().toLowerCase();
