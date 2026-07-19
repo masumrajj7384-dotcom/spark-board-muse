@@ -129,13 +129,14 @@ export default function Board() {
   });
 
   const newTaskInFirstColumn = async () => {
+    sim.pause();
     const col = b.columns[0];
     if (!col) return;
     const created = await b.createTask({ column_id: col.id, title: "New task" });
     if (created) setOpenTaskId(created.id);
   };
 
-  const onDragStart = (e: DragStartEvent) => setActiveId(e.active.id as string);
+  const onDragStart = (e: DragStartEvent) => { sim.pause(); setActiveId(e.active.id as string); };
   const onDragEnd = async (e: DragEndEvent) => {
     setActiveId(null);
     const { active, over } = e;
