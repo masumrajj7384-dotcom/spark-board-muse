@@ -1,10 +1,20 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Activity, ChevronUp, ChevronDown } from "lucide-react";
+import { Activity, ChevronUp, ChevronDown, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
 import type { SimEvent } from "./useBoardSimulation";
+import { SIM_MIN_MS, SIM_MAX_MS } from "./useBoardSimulation";
 
-export default function ActivityFeed({ events }: { events: SimEvent[] }) {
+export default function ActivityFeed({
+  events,
+  intervalMs,
+  onIntervalChange,
+}: {
+  events: SimEvent[];
+  intervalMs: number;
+  onIntervalChange: (ms: number) => void;
+}) {
   const [collapsed, setCollapsed] = useState(false);
 
   const toneColor = (tone: SimEvent["tone"]) =>
