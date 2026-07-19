@@ -354,7 +354,7 @@ export default function Board() {
         <Plus className="h-5 w-5" />
       </button>
 
-      <ActivityFeed events={sim.events} />
+      <ActivityFeed events={sim.events} intervalMs={simIntervalMs} onIntervalChange={setSimIntervalMs} />
       <DragEffectsLayer active={!!activeId} handleRef={effectsRef} />
     </AppShell>
   );
