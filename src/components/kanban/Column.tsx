@@ -1,5 +1,15 @@
 import { useDroppable } from "@dnd-kit/core";
-import { ChevronDown, MoreHorizontal, Plus, Trash2, Pencil } from "lucide-react";
+import { ChevronDown, MoreHorizontal, Plus, Trash2, Pencil, Inbox, ListTodo, Loader2, Eye, Ban, CheckCircle2, Circle, type LucideIcon } from "lucide-react";
+
+const COLOR_ICON: Record<string, LucideIcon> = {
+  slate: Inbox,
+  blue: ListTodo,
+  violet: Loader2,
+  amber: Eye,
+  rose: Ban,
+  emerald: CheckCircle2,
+};
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TaskCard from "./TaskCard";
