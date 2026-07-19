@@ -36,6 +36,8 @@ export function useBoardSimulation(api: BoardApi, enabled: boolean, intervalMs: 
   const idc = useRef(0);
   const apiRef = useRef(api);
   apiRef.current = api;
+  const intervalRef = useRef(intervalMs);
+  intervalRef.current = intervalMs;
 
   const pause = useCallback((ms: number = PAUSE_MS) => {
     pauseUntil.current = Math.max(pauseUntil.current, Date.now() + ms);
