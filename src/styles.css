@@ -341,3 +341,59 @@
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
 }
+
+/* Holographic / metallic refraction border. Wrap a child with padding to reveal the border. */
+@utility holo-border {
+  position: relative;
+  isolation: isolate;
+}
+.holo-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.25px;
+  background: conic-gradient(
+    from var(--holo-angle, 0deg),
+    oklch(0.78 0.22 295 / 0.9),
+    oklch(0.72 0.22 245 / 0.85),
+    oklch(0.85 0.18 190 / 0.9),
+    oklch(0.82 0.2 340 / 0.85),
+    oklch(0.78 0.22 295 / 0.9)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: holo-spin 6s linear infinite;
+  pointer-events: none;
+  opacity: 0.85;
+}
+@keyframes holo-spin {
+  to { --holo-angle: 360deg; }
+}
+@property --holo-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Slow breathing ambient glow behind primary buttons */
+@utility ambient-glow {
+  position: relative;
+}
+.ambient-glow::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--color-primary) 55%, transparent), transparent 70%);
+  filter: blur(10px);
+  z-index: -1;
+  opacity: 0.55;
+  animation: ambient-breathe 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes ambient-breathe {
+  0%, 100% { opacity: 0.35; transform: scale(0.96); }
+  50%      { opacity: 0.75; transform: scale(1.06); }
+}
