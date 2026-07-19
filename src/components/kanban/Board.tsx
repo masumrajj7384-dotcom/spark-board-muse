@@ -352,7 +352,7 @@ export default function Board() {
         <Plus className="h-5 w-5" />
       </button>
 
-      <ActivityFeed tasks={[...b.tasksById.values()]} />
+      <ActivityFeed events={sim.events} />
       <DragEffectsLayer active={!!activeId} handleRef={effectsRef} />
     </AppShell>
   );
