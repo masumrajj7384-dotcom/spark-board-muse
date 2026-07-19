@@ -54,7 +54,7 @@ export default function Column({
         isOver && "ring-2 ring-primary/60 scale-[1.01]",
       )}
     >
-      <div className="flex items-center gap-2 border-b border-border/40 px-3 py-2.5">
+      <div className="relative z-10 flex items-center gap-2 border-b border-border/40 px-3 py-2.5">
         <div className={cn("h-2 w-2 rounded-full", colorClass)} />
         {editingName ? (
           <Input
