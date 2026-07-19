@@ -10,7 +10,9 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
+import { Plus, ChevronDown, Plus as PlusIcon, Bot, Archive, LayoutDashboard, Calendar as CalendarIcon, GanttChart, FileText, Download, Sparkles } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { isPast, isToday, addDays } from "date-fns";
 import { toast } from "sonner";
 import { useBoardId, useBoard, type TaskWithMeta } from "@/lib/board-data";
