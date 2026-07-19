@@ -569,7 +569,7 @@ export default function WelcomeIntro({ open, onClose }: { open: boolean; onClose
               </div>
 
               {/* Scene dots */}
-              <div className="mt-3 flex items-center gap-2">
+              <div className="mt-3 flex flex-wrap items-center gap-2">
                 {SCENES.map((s) => {
                   const active = activeScene.id === s.id;
                   return (
@@ -577,13 +577,16 @@ export default function WelcomeIntro({ open, onClose }: { open: boolean; onClose
                       key={s.id}
                       onClick={() => jumpTo(s.id)}
                       className={cn(
-                        "flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                        "relative flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium transition-all",
                         active
-                          ? "border-primary/70 bg-primary/15 text-primary"
-                          : "border-border/50 bg-muted text-muted-foreground hover:bg-accent",
+                          ? "border-primary/70 bg-primary/15 text-primary shadow-[0_0_18px_-2px_rgba(139,92,246,0.7)] animate-[pulse-glow_2s_ease-in-out_infinite]"
+                          : "border-border/50 bg-muted text-muted-foreground hover:bg-accent hover:border-primary/40",
                       )}
                     >
-                      <span className={cn("h-1.5 w-1.5 rounded-full", active ? "bg-primary" : "bg-muted-foreground/60")} />
+                      <span className={cn(
+                        "h-1.5 w-1.5 rounded-full transition-all",
+                        active ? "bg-primary shadow-[0_0_8px_2px_rgba(139,92,246,0.9)]" : "bg-muted-foreground/60",
+                      )} />
                       Scene {s.id}
                     </button>
                   );
@@ -595,21 +598,21 @@ export default function WelcomeIntro({ open, onClose }: { open: boolean; onClose
                 <button
                   onClick={toggle}
                   aria-label={playing ? "Pause" : "Play"}
-                  className="grid h-9 w-9 place-items-center rounded-full bg-primary/90 text-primary-foreground shadow-[0_8px_20px_-6px_rgba(139,92,246,0.7)] hover:opacity-95"
+                  className="grid h-9 w-9 place-items-center rounded-full bg-primary/90 text-primary-foreground shadow-[0_8px_24px_-4px_rgba(139,92,246,0.85)] ring-1 ring-white/15 transition-transform hover:scale-105 hover:shadow-[0_12px_32px_-4px_rgba(139,92,246,1)]"
                 >
                   {playing ? <Pause className="h-4 w-4" fill="currentColor" /> : <Play className="h-4 w-4 translate-x-[1px]" fill="currentColor" />}
                 </button>
                 <button
                   onClick={restart}
                   aria-label="Restart"
-                  className="grid h-9 w-9 place-items-center rounded-full bg-muted text-foreground hover:bg-accent"
+                  className="grid h-9 w-9 place-items-center rounded-full bg-muted text-foreground ring-1 ring-white/10 transition-all hover:bg-accent hover:scale-105 hover:shadow-[0_6px_18px_-4px_rgba(139,92,246,0.5)]"
                 >
                   <RotateCcw className="h-4 w-4" />
                 </button>
 
                 <div className="relative flex-1">
                   {/* Segments */}
-                  <div onClick={seek} className="relative flex h-2 cursor-pointer overflow-hidden rounded-full bg-muted">
+                  <div onClick={seek} className="relative flex h-2 cursor-pointer overflow-hidden rounded-full bg-muted ring-1 ring-white/5">
                     {SCENES.map((s) => {
                       const w = ((s.end - s.start) / LOOP) * 100;
                       return (
@@ -622,8 +625,13 @@ export default function WelcomeIntro({ open, onClose }: { open: boolean; onClose
                       );
                     })}
                     <div
-                      className="pointer-events-none absolute inset-y-0 left-0 bg-gradient-to-r from-primary via-fuchsia-500 to-emerald-400"
-                      style={{ width: `${progress}%` }}
+                      className="pointer-events-none absolute inset-y-0 left-0 bg-gradient-to-r from-primary via-fuchsia-500 to-emerald-400 shadow-[0_0_14px_2px_rgba(168,85,247,0.7)]"
+                      style={{ width: `${progress}%`, filter: "drop-shadow(0 0 6px rgba(168,85,247,0.6))" }}
+                    />
+                    {/* moving glow head */}
+                    <div
+                      className="pointer-events-none absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_12px_4px_rgba(168,85,247,0.9)]"
+                      style={{ left: `${progress}%` }}
                     />
                   </div>
                 </div>
