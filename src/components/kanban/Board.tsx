@@ -144,6 +144,12 @@ export default function Board() {
 
     if (activeTask.column_id === newColId && activeTask.position === newPos) return;
     await b.updateTask(activeTask.id, { column_id: newColId, position: newPos });
+
+    // Completion burst when dropped in an "emerald" (Completed) column
+    const destCol = b.columns.find((c) => c.id === newColId);
+    if (destCol?.color === "emerald") {
+      effectsRef.current?.celebrate(lastPointer.current.x, lastPointer.current.y);
+    }
   };
 
   const activeTask = activeId ? b.tasksById.get(activeId) : null;
