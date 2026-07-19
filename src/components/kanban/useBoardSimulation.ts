@@ -28,7 +28,7 @@ type BoardApi = {
   onComplete: () => void;
 };
 
-export function useBoardSimulation(api: BoardApi, enabled: boolean) {
+export function useBoardSimulation(api: BoardApi, enabled: boolean, intervalMs: number = SIM_DEFAULT_MS) {
   const [events, setEvents] = useState<SimEvent[]>([]);
   const pauseUntil = useRef(0);
   const stepRef = useRef(0);
