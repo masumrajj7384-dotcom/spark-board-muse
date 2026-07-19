@@ -140,9 +140,15 @@ export default function Column({
         {items.length === 0 && (
           <button
             onClick={onAdd}
-            className="rounded-lg border border-dashed border-border/60 bg-transparent px-3 py-6 text-xs text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+            className="group relative flex min-h-[120px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 bg-white/[0.02] px-3 py-6 text-xs text-muted-foreground backdrop-blur-sm transition-all hover:border-white/25 hover:bg-white/[0.04] hover:text-foreground"
           >
-            + Add task
+            <span
+              className="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-muted-foreground shadow-inner transition-all group-hover:scale-110 group-hover:border-white/30 group-hover:text-foreground"
+              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 14px -6px color-mix(in oklab, var(--tint) 55%, transparent)" }}
+            >
+              <Plus className="h-4 w-4" />
+            </span>
+            <span className="text-[11px] font-medium tracking-wide opacity-80">Drop tasks here</span>
           </button>
         )}
       </div>
