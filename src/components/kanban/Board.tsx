@@ -223,7 +223,7 @@ export default function Board() {
           </div>
         ) : (
           <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onDragStart} onDragEnd={onDragEnd}>
-            <div className="flex gap-3 overflow-x-auto pb-6 scrollbar-thin">
+            <div className="flex min-h-[calc(100vh-13rem)] items-stretch gap-3 overflow-x-auto pb-6 scrollbar-thin">
               {grouped.map(({ column, items }) => (
                 <Column
                   key={column.id}
