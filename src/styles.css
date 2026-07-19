@@ -2,6 +2,8 @@
 @source "../src";
 @import "tw-animate-css";
 
+@source inline("bg-col-slate bg-col-blue bg-col-violet bg-col-amber bg-col-rose bg-col-emerald border-l-col-slate border-l-col-blue border-l-col-violet border-l-col-amber border-l-col-rose border-l-col-emerald bg-col-slate/15 bg-col-blue/15 bg-col-violet/15 bg-col-amber/15 bg-col-rose/15 bg-col-emerald/15 text-col-slate text-col-blue text-col-violet text-col-amber text-col-rose text-col-emerald");
+
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant amoled (&:where(.amoled, .amoled *));
 
